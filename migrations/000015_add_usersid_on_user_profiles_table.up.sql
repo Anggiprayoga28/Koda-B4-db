@@ -1,0 +1,1 @@
+-- ALTER TABLE user_profiles FOREIGN KEY (user_id) REFERENCES users(id);

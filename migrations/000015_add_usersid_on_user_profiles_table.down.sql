@@ -1,0 +1,1 @@
+DROP TABLE usersid_on_user_profiles;
