@@ -1,4 +1,3 @@
--- Active: 1762525064228@@192.168.139.54@5454@coffee_shop
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(30) UNIQUE,
@@ -16,8 +15,7 @@ CREATE TABLE user_profiles (
     address TEXT,
     photo_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE categories (
@@ -39,8 +37,7 @@ CREATE TABLE products (
     is_active BOOLEAN DEFAULT TRUE,
     stock INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE product_images (
@@ -49,8 +46,7 @@ CREATE TABLE product_images (
     image_url VARCHAR(255) NOT NULL,
     is_primary BOOLEAN,
     display_order INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE product_reviews (
@@ -59,9 +55,7 @@ CREATE TABLE product_reviews (
     user_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     review_text TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE promos (
@@ -80,9 +74,7 @@ CREATE TABLE promo_products (
     id SERIAL PRIMARY KEY,
     promo_id INT NOT NULL,
     product_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (promo_id) REFERENCES promos(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE delivery_methods (
@@ -110,6 +102,21 @@ CREATE TABLE tax_rates (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE product_sizes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price_adjustment INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE product_temperatures (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     order_number VARCHAR(50) UNIQUE NOT NULL,
@@ -126,27 +133,7 @@ CREATE TABLE orders (
     payment_method_id INT NOT NULL,
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id),
-    FOREIGN KEY (tax_rate_id) REFERENCES tax_rates(id),
-    FOREIGN KEY (promo_id) REFERENCES promos(id) ON DELETE SET NULL,
-    FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id)
-);
-
-CREATE TABLE product_sizes (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    price_adjustment INT DEFAULT 0,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE product_temperatures (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE order_items (
@@ -154,85 +141,101 @@ CREATE TABLE order_items (
     order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
-    size_id INT REFERENCES product_sizes(id),
-    temperature_id INT REFERENCES product_temperatures(id),
+    size_id INT,
+    temperature_id INT,
     unit_price INT NOT NULL,
     is_flash_sale BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE cart_items (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
-    size_id INT REFERENCES product_sizes(id),
-    temperature_id INT REFERENCES product_temperatures(id),
+    size_id INT,
+    temperature_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- SELECT * FROM users;
--- SELECT * FROM user_profiles;
--- SELECT * FROM categories;
--- SELECT * FROM products;
--- SELECT * FROM product_images;
--- SELECT * FROM product_reviews;
--- SELECT * FROM promos;
--- SELECT * FROM promo_products;
--- SELECT * FROM delivery_methods;
--- SELECT * FROM payment_methods;
--- SELECT * FROM tax_rates;
--- SELECT * FROM orders;
--- SELECT * FROM order_items;
--- SELECT * FROM cart_items;
 
+ALTER TABLE user_profiles 
+ADD CONSTRAINT fk_user_profiles_user 
+FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE products 
+ADD CONSTRAINT fk_products_category 
+FOREIGN KEY (category_id) REFERENCES categories(id);
 
--- INSERT INTO users (id, email, password, role, created_at, updated_at) VALUES
--- (1, 'admin@harlanholden.com', '$2b$10$abcdefghijklmnopqrstuv', 'admin', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
--- (2, 'anggi@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
--- (3, 'prayoga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
--- (4, 'raka@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
--- (5, 'rangga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
+ALTER TABLE product_images 
+ADD CONSTRAINT fk_product_images_product 
+FOREIGN KEY (product_id) REFERENCES products(id);
 
--- INSERT INTO user_profiles (id, user_id, full_name, phone, address, photo_url, created_at, updated_at) VALUES
--- (1, 1, 'Admin Harlan Holden', '081234567890', 'Jl. Sudirman, Jakarta Pusat', 'https://id.pinterest.com/pin/625226360811543537/', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
--- (2, 2, 'Anggi', '082345678901', 'Jl. Thamrin No. 123, Jakarta Pusat', 'https://id.pinterest.com/pin/295408056838997225/', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
--- (3, 3, 'Prayoga', '083456789012', 'Jl. Gatot Subroto No. 45, Jakarta Selatan', 'https://id.pinterest.com/pin/539235755400242280/', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
--- (4, 4, 'Raka', '084567890123', 'Jl. HR Rasuna Said No. 78, Jakarta Selatan', 'https://id.pinterest.com/pin/187251297001767651/', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
--- (5, 5, 'Rangga', '085678901234', 'Jl. Kuningan No. 90, Jakarta Selatan', 'https://id.pinterest.com/pin/238479742765437125/', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
+ALTER TABLE product_reviews 
+ADD CONSTRAINT fk_product_reviews_product 
+FOREIGN KEY (product_id) REFERENCES products(id);
 
--- INSERT INTO categories (id, name, is_active, created_at) VALUES
--- (1, 'Coffee', TRUE, '2025-10-10 08:00:00'),
--- (2, 'Non-Coffee', TRUE, '2025-10-10 08:00:00'),
--- (3, 'Food', TRUE, '2025-10-10 08:00:00'),
--- (4, 'Addon', TRUE, '2025-10-10 08:00:00');
+ALTER TABLE product_reviews 
+ADD CONSTRAINT fk_product_reviews_user 
+FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE promo_products 
+ADD CONSTRAINT fk_promo_products_promo 
+FOREIGN KEY (promo_id) REFERENCES promos(id);
 
+ALTER TABLE promo_products 
+ADD CONSTRAINT fk_promo_products_product 
+FOREIGN KEY (product_id) REFERENCES products(id);
 
+ALTER TABLE orders 
+ADD CONSTRAINT fk_orders_user 
+FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE orders 
+ADD CONSTRAINT fk_orders_delivery_method 
+FOREIGN KEY (delivery_method_id) REFERENCES delivery_methods(id);
 
-DROP TABLE users;
-DROP TABLE user_profiles;
-DROP TABLE categories;
-DROP TABLE products;
-DROP TABLE product_images;
-DROP TABLE product_reviews;
-DROP TABLE promos;
-DROP TABLE promo_products;
-DROP TABLE delivery_methods;
-DROP TABLE payment_methods;
-DROP TABLE tax_rates;
-DROP TABLE orders;
-DROP TABLE product_sizes;
-DROP TABLE product_temperatures;
-DROP TABLE order_items;
-DROP TABLE cart_items;
+ALTER TABLE orders 
+ADD CONSTRAINT fk_orders_tax_rate 
+FOREIGN KEY (tax_rate_id) REFERENCES tax_rates(id);
 
-migrate create -ext sql -dir migrations -seq 
+ALTER TABLE orders 
+ADD CONSTRAINT fk_orders_promo 
+FOREIGN KEY (promo_id) REFERENCES promos(id) ON DELETE SET NULL;
+
+ALTER TABLE orders 
+ADD CONSTRAINT fk_orders_payment_method 
+FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id);
+
+ALTER TABLE order_items 
+ADD CONSTRAINT fk_order_items_order 
+FOREIGN KEY (order_id) REFERENCES orders(id);
+
+ALTER TABLE order_items 
+ADD CONSTRAINT fk_order_items_product 
+FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE order_items 
+ADD CONSTRAINT fk_order_items_size 
+FOREIGN KEY (size_id) REFERENCES product_sizes(id);
+
+ALTER TABLE order_items 
+ADD CONSTRAINT fk_order_items_temperature 
+FOREIGN KEY (temperature_id) REFERENCES product_temperatures(id);
+
+ALTER TABLE cart_items 
+ADD CONSTRAINT fk_cart_items_user 
+FOREIGN KEY (user_id) REFERENCES users(id);
+
+ALTER TABLE cart_items 
+ADD CONSTRAINT fk_cart_items_product 
+FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE cart_items 
+ADD CONSTRAINT fk_cart_items_size 
+FOREIGN KEY (size_id) REFERENCES product_sizes(id);
+
+ALTER TABLE cart_items 
+ADD CONSTRAINT fk_cart_items_temperature 
+FOREIGN KEY (temperature_id) REFERENCES product_temperatures(id);
