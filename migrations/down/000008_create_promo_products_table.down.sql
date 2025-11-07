@@ -1,1 +1,0 @@
-DROP TABLE promo_products;

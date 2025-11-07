@@ -1,3 +1,4 @@
+-- Active: 1762525064228@@192.168.139.54@5454@coffee_shop
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(30) UNIQUE,
@@ -8,7 +9,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_profiles (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     full_name VARCHAR(255),
     phone VARCHAR(20),
@@ -20,14 +21,14 @@ CREATE TABLE user_profiles (
 );
 
 CREATE TABLE categories (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE products (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     category_id INT NOT NULL,
@@ -43,7 +44,7 @@ CREATE TABLE products (
 );
 
 CREATE TABLE product_images (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     image_url VARCHAR(255) NOT NULL,
     is_primary BOOLEAN,
@@ -53,7 +54,7 @@ CREATE TABLE product_images (
 );
 
 CREATE TABLE product_reviews (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
@@ -64,7 +65,7 @@ CREATE TABLE product_reviews (
 );
 
 CREATE TABLE promos (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -76,7 +77,7 @@ CREATE TABLE promos (
 );
 
 CREATE TABLE promo_products (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     promo_id INT NOT NULL,
     product_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -85,7 +86,7 @@ CREATE TABLE promo_products (
 );
 
 CREATE TABLE delivery_methods (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     base_fee INT NOT NULL,
     description TEXT,
@@ -94,7 +95,7 @@ CREATE TABLE delivery_methods (
 );
 
 CREATE TABLE payment_methods (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     is_active BOOLEAN DEFAULT TRUE,
@@ -102,7 +103,7 @@ CREATE TABLE payment_methods (
 );
 
 CREATE TABLE tax_rates (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     rate_percentage DECIMAL(5,2) NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -110,7 +111,7 @@ CREATE TABLE tax_rates (
 );
 
 CREATE TABLE orders (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     order_number VARCHAR(50) UNIQUE NOT NULL,
     user_id INT NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
@@ -133,8 +134,23 @@ CREATE TABLE orders (
     FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id)
 );
 
+CREATE TABLE product_sizes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    price_adjustment INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE product_temperatures (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE order_items (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
@@ -147,8 +163,9 @@ CREATE TABLE order_items (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+
 CREATE TABLE cart_items (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
@@ -160,54 +177,62 @@ CREATE TABLE cart_items (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
-SELECT * FROM users;
-SELECT * FROM user_profiles;
-SELECT * FROM categories;
-SELECT * FROM products;
-SELECT * FROM product_images;
-SELECT * FROM product_reviews;
-SELECT * FROM promos;
-SELECT * FROM promo_products;
-SELECT * FROM delivery_methods;
-SELECT * FROM payment_methods;
-SELECT * FROM tax_rates;
-SELECT * FROM orders;
-SELECT * FROM order_items;
-SELECT * FROM cart_items;
+-- SELECT * FROM users;
+-- SELECT * FROM user_profiles;
+-- SELECT * FROM categories;
+-- SELECT * FROM products;
+-- SELECT * FROM product_images;
+-- SELECT * FROM product_reviews;
+-- SELECT * FROM promos;
+-- SELECT * FROM promo_products;
+-- SELECT * FROM delivery_methods;
+-- SELECT * FROM payment_methods;
+-- SELECT * FROM tax_rates;
+-- SELECT * FROM orders;
+-- SELECT * FROM order_items;
+-- SELECT * FROM cart_items;
 
 
 
-INSERT INTO users (id, email, password, role, created_at, updated_at) VALUES
-(1, 'admin@harlanholden.com', '$2b$10$abcdefghijklmnopqrstuv', 'admin', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
-(2, 'anggi@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
-(3, 'prayoga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
-(4, 'raka@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
-(5, 'rangga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
+-- INSERT INTO users (id, email, password, role, created_at, updated_at) VALUES
+-- (1, 'admin@harlanholden.com', '$2b$10$abcdefghijklmnopqrstuv', 'admin', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
+-- (2, 'anggi@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
+-- (3, 'prayoga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
+-- (4, 'raka@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
+-- (5, 'rangga@email.com', '$2b$10$abcdefghijklmnopqrstuv', 'customer', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
 
-INSERT INTO user_profiles (id, user_id, full_name, phone, address, photo_url, created_at, updated_at) VALUES
-(1, 1, 'Admin Harlan Holden', '081234567890', 'Jl. Sudirman, Jakarta Pusat', 'https://id.pinterest.com/pin/625226360811543537/', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
-(2, 2, 'Anggi', '082345678901', 'Jl. Thamrin No. 123, Jakarta Pusat', 'https://id.pinterest.com/pin/295408056838997225/', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
-(3, 3, 'Prayoga', '083456789012', 'Jl. Gatot Subroto No. 45, Jakarta Selatan', 'https://id.pinterest.com/pin/539235755400242280/', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
-(4, 4, 'Raka', '084567890123', 'Jl. HR Rasuna Said No. 78, Jakarta Selatan', 'https://id.pinterest.com/pin/187251297001767651/', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
-(5, 5, 'Rangga', '085678901234', 'Jl. Kuningan No. 90, Jakarta Selatan', 'https://id.pinterest.com/pin/238479742765437125/', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
+-- INSERT INTO user_profiles (id, user_id, full_name, phone, address, photo_url, created_at, updated_at) VALUES
+-- (1, 1, 'Admin Harlan Holden', '081234567890', 'Jl. Sudirman, Jakarta Pusat', 'https://id.pinterest.com/pin/625226360811543537/', '2025-10-15 08:00:00', '2025-10-15 08:00:00'),
+-- (2, 2, 'Anggi', '082345678901', 'Jl. Thamrin No. 123, Jakarta Pusat', 'https://id.pinterest.com/pin/295408056838997225/', '2025-10-01 10:30:00', '2025-10-01 10:30:00'),
+-- (3, 3, 'Prayoga', '083456789012', 'Jl. Gatot Subroto No. 45, Jakarta Selatan', 'https://id.pinterest.com/pin/539235755400242280/', '2025-10-15 14:20:00', '2025-10-15 14:20:00'),
+-- (4, 4, 'Raka', '084567890123', 'Jl. HR Rasuna Said No. 78, Jakarta Selatan', 'https://id.pinterest.com/pin/187251297001767651/', '2025-10-01 09:15:00', '2025-10-01 09:15:00'),
+-- (5, 5, 'Rangga', '085678901234', 'Jl. Kuningan No. 90, Jakarta Selatan', 'https://id.pinterest.com/pin/238479742765437125/', '2025-10-10 16:45:00', '2025-10-10 16:45:00');
 
-INSERT INTO categories (id, name, is_active, created_at) VALUES
-(1, 'Coffee', TRUE, '2025-10-10 08:00:00'),
-(2, 'Non-Coffee', TRUE, '2025-10-10 08:00:00'),
-(3, 'Food', TRUE, '2025-10-10 08:00:00'),
-(4, 'Addon', TRUE, '2025-10-10 08:00:00');
+-- INSERT INTO categories (id, name, is_active, created_at) VALUES
+-- (1, 'Coffee', TRUE, '2025-10-10 08:00:00'),
+-- (2, 'Non-Coffee', TRUE, '2025-10-10 08:00:00'),
+-- (3, 'Food', TRUE, '2025-10-10 08:00:00'),
+-- (4, 'Addon', TRUE, '2025-10-10 08:00:00');
 
-CREATE TABLE product_sizes (
-    id INT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    price_adjustment INT DEFAULT 0,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
-CREATE TABLE product_temperatures (
-    id INT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+
+
+
+DROP TABLE users;
+DROP TABLE user_profiles;
+DROP TABLE categories;
+DROP TABLE products;
+DROP TABLE product_images;
+DROP TABLE product_reviews;
+DROP TABLE promos;
+DROP TABLE promo_products;
+DROP TABLE delivery_methods;
+DROP TABLE payment_methods;
+DROP TABLE tax_rates;
+DROP TABLE orders;
+DROP TABLE product_sizes;
+DROP TABLE product_temperatures;
+DROP TABLE order_items;
+DROP TABLE cart_items;
+
+migrate create -ext sql -dir migrations -seq 

@@ -1,7 +1,0 @@
-CREATE TABLE tax_rates (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    rate_percentage DECIMAL(5,2) NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);

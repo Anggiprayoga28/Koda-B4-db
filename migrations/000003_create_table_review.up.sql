@@ -1,5 +1,6 @@
+-- Active: 1762525064228@@192.168.139.54@5454@coffee_shop
 CREATE TABLE product_reviews (
-    id INT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     user_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
@@ -8,3 +9,5 @@ CREATE TABLE product_reviews (
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+table users;
