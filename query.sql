@@ -239,3 +239,6 @@ FOREIGN KEY (size_id) REFERENCES product_sizes(id);
 ALTER TABLE cart_items 
 ADD CONSTRAINT fk_cart_items_temperature 
 FOREIGN KEY (temperature_id) REFERENCES product_temperatures(id);
+
+ALTER TABLE products 
+ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
