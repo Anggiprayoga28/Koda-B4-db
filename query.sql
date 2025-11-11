@@ -159,6 +159,50 @@ CREATE TABLE cart_items (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE product_variants (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE product_details (
+    id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    size_id INT,
+    temperature_id INT,
+    variant_id INT,
+    price_adjustment INT DEFAULT 0,
+    stock_adjustment INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (size_id) REFERENCES product_sizes(id),
+    FOREIGN KEY (temperature_id) REFERENCES product_temperatures(id),
+    FOREIGN KEY (variant_id) REFERENCES product_variants(id),
+    UNIQUE(product_id, size_id, temperature_id, variant_id)
+);
+CREATE TABLE product_recommendations (
+    id SERIAL PRIMARY KEY,
+    product_detail_id INT NOT NULL,
+    recommended_product_detail_id INT NOT NULL,
+    recommendation_type VARCHAR(50) NOT NULL,
+    priority INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recommended_product_detail_id) REFERENCES product_details(id),
+    UNIQUE(product_detail_id, recommended_product_detail_id)
+);
+
+
+ALTER TABLE product_images 
+ADD CONSTRAINT check_image_position CHECK (display_order BETWEEN 1 AND 4);
+
+ALTER TABLE product_images 
+ADD CONSTRAINT unique_product_image_position UNIQUE (product_id, display_order);
+
 
 ALTER TABLE user_profiles 
 ADD CONSTRAINT fk_user_profiles_user 
