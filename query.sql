@@ -286,3 +286,16 @@ FOREIGN KEY (temperature_id) REFERENCES product_temperatures(id);
 
 ALTER TABLE products 
 ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
+
+ALTER TABLE product_temperatures 
+ADD COLUMN price INT DEFAULT 0;
+
+ALTER TABLE product_variants 
+ADD COLUMN price INT DEFAULT 0;
+
+ALTER TABLE cart_items 
+ADD COLUMN variant_id INT;
+
+ALTER TABLE cart_items 
+ADD CONSTRAINT fk_cart_items_variant 
+FOREIGN KEY (variant_id) REFERENCES product_variants(id);
