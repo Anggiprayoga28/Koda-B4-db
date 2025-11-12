@@ -156,28 +156,30 @@ INSERT INTO cart_items (user_id, product_id, quantity, size_id, temperature_id, 
 (3, 33, 2, NULL, NULL, '2025-10-11 14:32:00', '2025-10-11 14:32:00'),
 (4, 11, 1, 1, 1, '2025-10-12 09:15:00', '2025-10-12 09:15:00');
 
-INSERT INTO product_variants (name, description, is_active) VALUES
-('Extra Shot', 'Add 1 shot of espresso', true),
-('Double Shot', 'Add 2 shots of espresso', true),
-('Less Sugar', 'Sugar reduced by 50%', true),
-('No Sugar', 'No sugar', true),
-('Extra Sugar', 'Extra sugar', true),
-('Extra Whipped Cream', 'Add whipped cream on top', true),
-('Soy Milk', 'Replace regular milk with soy milk', true),
-('Oat Milk', 'Replace regular milk with oat milk', true),
-('Almond Milk', 'Replace regular milk with almond milk', true),
-('Caramel Drizzle', 'Additional caramel drizzle', true),
-('Chocolate Syrup', 'Additional chocolate syrup', true),
-('Vanilla Syrup', 'Additional vanilla syrup', true),
-('Extra Ice', 'More ice', true),
-('Less Ice', 'Less ice', true),
-('No Ice', 'No ice', true);
-
-
+INSERT INTO product_variants (name, description, price, is_active) VALUES
+('Regular', 'Varian standar', 0, TRUE),
+('Decaf', 'Tanpa kafein', 3000, TRUE),
+('Oat Milk', 'Dengan susu oat', 5000, TRUE),
+('Almond Milk', 'Dengan susu almond', 5000, TRUE),
+('Soy Milk', 'Dengan susu kedelai', 4000, TRUE),
+('Extra Shot', 'Tambahan espresso shot', 8000, TRUE),
+('Sugar Free', 'Tanpa gula', 0, TRUE),
+('Extra Cream', 'Tambahan krim', 3000, TRUE),
+('Caramel Drizzle', 'Dengan caramel drizzle', 4000, TRUE),
+('Chocolate Chip', 'Dengan chocolate chip', 5000, TRUE);
 
 
 INSERT INTO product_images (product_id, image_url, is_primary, display_order) VALUES
-(1, 'https://food-cms.grab.com/compressed_webp/items/PHITE2022111608533096371/detail/menueditor_item_77c30fb249fb491bac3eb05522beb91a_1701165051471861885.webp', true, 1),
-(1, 'https://i.pinimg.com/1200x/e8/06/81/e8068186818ad7f0223acf7732643d98.jpg', false, 2),
-(1, 'https://i.pinimg.com/736x/d5/2e/4e/d52e4e807352c3421ed89d95ddee75a2.jpg', false, 3),
-(1, 'https://i.pinimg.com/1200x/32/ba/52/32ba52056d30b5bed11e6aeb2ad30874.jpg', false, 4);
+(6, 'https://food-cms.grab.com/compressed_webp/items/PHITE2022111608533096371/detail/menueditor_item_77c30fb249fb491bac3eb05522beb91a_1701165051471861885.webp', true, 1),
+(6, 'https://i.pinimg.com/1200x/e8/06/81/e8068186818ad7f0223acf7732643d98.jpg', false, 2),
+(6, 'https://i.pinimg.com/736x/d5/2e/4e/d52e4e807352c3421ed89d95ddee75a2.jpg', false, 3),
+(6, 'https://i.pinimg.com/1200x/32/ba/52/32ba52056d30b5bed11e6aeb2ad30874.jpg', false, 4);
+
+
+INSERT INTO product_temperatures (name, price, is_active) VALUES
+('Hot', 0, TRUE),
+('Iced', 2000, TRUE),
+('Warm', 0, TRUE),
+('Extra Hot', 1000, TRUE),
+('Blended', 3000, TRUE);
+
